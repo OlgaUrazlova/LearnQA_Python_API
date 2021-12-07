@@ -1,7 +1,13 @@
-def print_hi(name):
-    print(f'Hello from {name}!')
+import requests
+
+url = "https://playground.learnqa.ru/api/"
+
+
+def request_get_text(uri):
+    response = requests.get(url + uri)
+    print(response.text)
 
 
 if __name__ == '__main__':
-    print_hi('Olga')
+    request_get_text('get_text')
 
