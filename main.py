@@ -1,7 +1,7 @@
-def print_hi():
-    print('Hello world!')
+def print_hi(name):
+    print(f'Hello from {name}!')
 
 
 if __name__ == '__main__':
-    print_hi()
+    print_hi('Olga')
 
