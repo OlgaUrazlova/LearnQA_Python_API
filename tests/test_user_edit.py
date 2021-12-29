@@ -112,7 +112,7 @@ class TestUserEdit(BaseCase):
             "password": "1234"
         }
 
-        response_login = MyRequests.post("user/login", data=login_data)
+        response_login = MyRequests.post("/user/login", data=login_data)
 
         auth_sid = self.get_cookie(response_login, "auth_sid")
         token = self.get_header(response_login, "x-csrf-token")

@@ -67,7 +67,7 @@ class TestUserDelete(BaseCase):
 
         email = register_data["email"]
         password = register_data["password"]
-        user_id = self.get_json_value(response, "id")
+        user_id_1 = self.get_json_value(response, "id")
 
         # LOGIN
         login_data = {
@@ -79,15 +79,22 @@ class TestUserDelete(BaseCase):
         auth_sid = self.get_cookie(response_login, "auth_sid")
         token = self.get_header(response_login, "x-csrf-token")
 
+        # REGISTRATION ANOTHER USER
+        register_data = self.prepare_registration_data()
+        response = MyRequests.post("/user/", data=register_data)
+        Assertions.assert_code_status(response, 200)
+        Assertions.assert_json_has_key(response, "id")
+
+        user_id_2 = self.get_json_value(response, "id")
+
         # DELETE
-        user_id_to_delete = str(int(user_id) - 1)
-        response_delete = MyRequests.delete(f"/user/{user_id_to_delete}", headers={"x-csrf-token": token},
+        response_delete = MyRequests.delete(f"/user/{user_id_2}", headers={"x-csrf-token": token},
                                             cookies={"auth_sid": auth_sid})
 
         Assertions.assert_code_status(response_delete, 200)
 
         # CHECK DELETED USER
-        response_check = MyRequests.get(f"/user/{user_id_to_delete}", headers={"x-csrf-token": token},
+        response_check = MyRequests.get(f"/user/{user_id_2}", headers={"x-csrf-token": token},
                                         cookies={"auth_sid": auth_sid})
 
         Assertions.assert_code_status(response_check, 200)
